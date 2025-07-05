@@ -142,7 +142,7 @@ Route::middleware(['CheckInstallation', 'checkRole',])->group(function () {
     Route::get('/email/verify/{id}/{hash}', [ClientController::class, 'verify_email'])->middleware(['auth:web,client', 'signed'])->name('verification.verify');
     Route::get('/email/verification-notification', [UserController::class, 'resend_verification_link'])->middleware(['auth:web,client', 'throttle:6,1'])->name('verification.send');
     // ,'custom-verified'
-    Route::prefix('master-panel')->middleware(['multiguard', 'custom-verified', 'check.subscription', 'subscription.modules'])->group(function () {
+    Route::prefix('master-panel')->group(function () {
         Route::get('/home', [DashboardController::class, 'index'])->name('home.index');
         Route::get('/home/upcoming-birthdays', [HomeController::class, 'upcoming_birthdays'])->name('home.upcoming_birthdays');
 
