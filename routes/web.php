@@ -117,6 +117,7 @@ Route::put("settings/languages/set-default", [LanguageController::class, 'set_de
 Route::put('/profile/update_photo/{userOrClient}', [ProfileController::class, 'update_photo'])->name('profile.update_photo');
 Route::get('/search', [SearchController::class, 'search'])->name('search.search');
 Route::put('profile/update/{userOrClient}', [ProfileController::class, 'update'])->name('profile.update')->middleware(['demo_restriction']);
+Route::post('/users/authenticate', [UserController::class, 'authenticate'])->name('users.authenticate');
 Route::middleware(['CheckInstallation', 'checkRole',])->group(function () {
     Route::get('/', [FrontEndController::class, 'index'])->name('frontend.index');
     Route::get('/about-us', [FrontEndController::class, 'about_us'])->name('frontend.about_us');
@@ -130,7 +131,6 @@ Route::middleware(['CheckInstallation', 'checkRole',])->group(function () {
     Route::get('/refund-policy', [FrontEndController::class, 'refund_policy'])->name('frontend.refund_policy');
     Route::get('/login', [UserController::class, 'login'])->name('login');
     Route::post('/users/register', [UserController::class, 'register'])->name('users.register');
-    Route::post('/users/authenticate', [UserController::class, 'authenticate'])->name('users.authenticate');
     Route::get('/register', function () {
         return view('auth.register');
     })->name('register');
@@ -142,7 +142,7 @@ Route::middleware(['CheckInstallation', 'checkRole',])->group(function () {
     Route::get('/email/verify/{id}/{hash}', [ClientController::class, 'verify_email'])->middleware(['auth:web,client', 'signed'])->name('verification.verify');
     Route::get('/email/verification-notification', [UserController::class, 'resend_verification_link'])->middleware(['auth:web,client', 'throttle:6,1'])->name('verification.send');
     // ,'custom-verified'
-    Route::prefix('master-panel')->group(function () {
+    Route::prefix('master-panel')->middleware(['multiguard', 'custom-verified', 'check.subscription', 'subscription.modules'])->group(function () {
         Route::get('/home', [DashboardController::class, 'index'])->name('home.index');
         Route::get('/home/upcoming-birthdays', [HomeController::class, 'upcoming_birthdays'])->name('home.upcoming_birthdays');
 
