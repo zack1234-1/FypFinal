@@ -117,8 +117,8 @@ Route::put("settings/languages/set-default", [LanguageController::class, 'set_de
 Route::put('/profile/update_photo/{userOrClient}', [ProfileController::class, 'update_photo'])->name('profile.update_photo');
 Route::get('/search', [SearchController::class, 'search'])->name('search.search');
 Route::put('profile/update/{userOrClient}', [ProfileController::class, 'update'])->name('profile.update')->middleware(['demo_restriction']);
-Route::post('/users/authenticate', [UserController::class, 'authenticate'])->name('users.authenticate');
-Route::middleware(['CheckInstallation', 'checkRole',])->group(function () {
+Route::middleware(['CheckInstallation', 'checkRole',])->group(function () 
+{
     Route::get('/', [FrontEndController::class, 'index'])->name('frontend.index');
     Route::get('/about-us', [FrontEndController::class, 'about_us'])->name('frontend.about_us');
     Route::get('/contact-us', [FrontEndController::class, 'contact_us'])->name('frontend.contact_us');
@@ -131,6 +131,7 @@ Route::middleware(['CheckInstallation', 'checkRole',])->group(function () {
     Route::get('/refund-policy', [FrontEndController::class, 'refund_policy'])->name('frontend.refund_policy');
     Route::get('/login', [UserController::class, 'login'])->name('login');
     Route::post('/users/register', [UserController::class, 'register'])->name('users.register');
+    Route::post('/users/authenticate', [UserController::class, 'authenticate'])->name('users.authenticate');
     Route::get('/register', function () {
         return view('auth.register');
     })->name('register');
