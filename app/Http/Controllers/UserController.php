@@ -249,35 +249,35 @@ class UserController extends Controller
 
     public function authenticate(Request $request)
     {
-        // $credentials = $request->validate([
-        //     'email' => ['required', 'email'],
-        //     'password' => 'required'
-        // ]);
+        dd($request->all());
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => 'required'
+        ]);
 
-        // $maxLoginAttempts = (int) $this->getSetting('max_login_attempts', 5);
-        // $decayTime = (int) $this->getSetting('time_decay', 1) * 60;
-        // $throttleKey = Str::lower($credentials['email']) . '|' . $request->ip();
+        $maxLoginAttempts = (int) $this->getSetting('max_login_attempts', 5);
+        $decayTime = (int) $this->getSetting('time_decay', 1) * 60;
+        $throttleKey = Str::lower($credentials['email']) . '|' . $request->ip();
 
-        // if ($maxLoginAttempts > 0 && $this->hasTooManyLoginAttempts($throttleKey, $maxLoginAttempts)) {
-        //     return $this->sendLockoutResponse($throttleKey);
-        // }
+        if ($maxLoginAttempts > 0 && $this->hasTooManyLoginAttempts($throttleKey, $maxLoginAttempts)) {
+            return $this->sendLockoutResponse($throttleKey);
+        }
 
-        // $account = $this->findAccount($credentials['email']);
+        $account = $this->findAccount($credentials['email']);
 
-        // if (!$account) {
-        //     return $this->handleFailedLogin($throttleKey, $maxLoginAttempts, $decayTime);
-        // }
+        if (!$account) {
+            return $this->handleFailedLogin($throttleKey, $maxLoginAttempts, $decayTime);
+        }
 
-        // $loginAttempt = $this->attemptLogin($account, $credentials['password']);
+        $loginAttempt = $this->attemptLogin($account, $credentials['password']);
 
-        // if ($loginAttempt === true) {
-        //     return $this->sendSuccessResponse($request, $account);
-        // } elseif (is_array($loginAttempt) && isset($loginAttempt['error'])) {
-        //     return response()->json($loginAttempt);
-        // }
+        if ($loginAttempt === true) {
+            return $this->sendSuccessResponse($request, $account);
+        } elseif (is_array($loginAttempt) && isset($loginAttempt['error'])) {
+            return response()->json($loginAttempt);
+        }
 
-        // return $this->handleFailedLogin($throttleKey, $maxLoginAttempts, $decayTime);
-         return response('Login failed. Invalid credentials.');
+        return $this->handleFailedLogin($throttleKey, $maxLoginAttempts, $decayTime);
     }
 
 
