@@ -22,7 +22,6 @@
                                 action="{{ route('users.authenticate') }}" method="POST">
                                 <input type="hidden" name="redirect_url" value="{{ route('home.index') }}">
                                 @csrf
-                                
                                 <div class="mb-4">
                                     <label for="email" class="form-label fw-semibold">
                                         <i class="fas fa-envelope me-1"></i>
