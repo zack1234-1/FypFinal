@@ -82,8 +82,6 @@ class HomeController extends Controller
             }
         }
 
-
-
         return view(
             'superadmin.dashborad.index',
             [

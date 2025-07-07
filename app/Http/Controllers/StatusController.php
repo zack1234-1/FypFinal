@@ -15,10 +15,16 @@ class StatusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        return view('status.list');
+        $workspaceId = session()->get('workspace_id');
+
+        $statuses = Status::where('workspace_id', $workspaceId)->get();
+
+        return view('status.list', compact('statuses'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -36,25 +42,45 @@ class StatusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
         $adminId = getAdminIdByUserRole();
-        $formFields = $request->validate([
+
+        // Validate input
+        $validated = $request->validate([
             'title' => ['required'],
             'color' => ['required']
         ]);
-        $slug = generateUniqueSlug($request->title, Status::class);
-        $formFields['slug'] = $slug;
-        $formFields['admin_id'] = $adminId;
 
-        $roleIds = $request->input('role_ids');
-        if ($status = Status::create($formFields)) {
-            $status->roles()->attach($roleIds);
-            return response()->json(['error' => false, 'message' => 'Status created successfully.', 'id' => $status->id, 'status' => $status]);
+        $workspaceId = session()->get('workspace_id');
+        if (!$workspaceId) {
+            return response()->json(['error' => true, 'message' => 'No workspace selected.']);
+        }
+
+        // Create a new Status instance manually
+        $status = new Status();
+        $status->title = $request->title;
+        $status->color = $request->color;
+        $status->slug = generateUniqueSlug($request->title, Status::class);
+        $status->admin_id = $adminId;
+        $status->workspace_id = $workspaceId;
+
+        // Save to DB
+        if ($status->save()) {
+            // Attach roles if any
+            $roleIds = $request->input('role_ids');
+            if ($roleIds) {
+                $status->roles()->attach($roleIds);
+            }
+
+          Session::flash('message', 'Status Card created successfully.');
+          return back();
         } else {
-            return response()->json(['error' => true, 'message' => 'Status couldn\'t created.']);
+            return response()->json(['error' => true, 'message' => 'Status couldn\'t be created.']);
         }
     }
+
 
     public function list()
     {
@@ -132,23 +158,37 @@ class StatusController extends Controller
      */
     public function update(Request $request)
     {
-        $formFields = $request->validate([
+        // Validate input
+        $validated = $request->validate([
             'id' => ['required'],
             'title' => ['required'],
             'color' => ['required']
         ]);
-        $slug = generateUniqueSlug($request->title, Status::class, $request->id);
-        $formFields['slug'] = $slug;
+
+        // Find the status or fail
         $status = Status::findOrFail($request->id);
 
-        if ($status->update($formFields)) {
+        // Assign values manually
+        $status->title = $request->title;
+        $status->color = $request->color;
+        $status->slug = generateUniqueSlug($request->title, Status::class, $request->id);
+
+        // Save updated status
+        if ($status->save()) {
+            // Sync roles if provided
             $roleIds = $request->input('role_ids');
             $status->roles()->sync($roleIds);
-            return response()->json(['error' => false, 'message' => 'Status updated successfully.', 'id' => $status->id]);
+
+            Session::flash('message', 'Status Card updated successfully.');
+            return back();
         } else {
-            return response()->json(['error' => true, 'message' => 'Status couldn\'t updated.']);
+            return response()->json([
+                'error' => true,
+                'message' => 'Status couldn\'t be updated.'
+            ]);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -160,12 +200,13 @@ class StatusController extends Controller
     {
         $status = Status::findOrFail($id);
         if ($status->projects()->count() > 0 ||  $status->tasks()->count() > 0) {
-
+             
             return response()->json(['error' => true, 'message' => 'Status can\'t be deleted.It is associated with a project or task.']);
         } else {
 
             $response = DeletionService::delete(Status::class, $id, 'Status');
-            return $response;
+            Session::flash('message', 'Status Card deleted successfully.');
+            return back();
         }
     }
 

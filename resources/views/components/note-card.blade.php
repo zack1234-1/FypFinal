@@ -32,9 +32,13 @@
                                         <i class='bx bx-edit text-primary'></i>
                                     </a>
 
-                                    <a href="javascript:void(0);" class="delete-note" data-id="{{ $note->id }}" data-url="{{ route('notes.destroy', $note->id) }}">
+                                    <form action="{{ route('notes.destroy', $note->id) }}" method="POST" class="d-inline">
+                                      @csrf
+                                      @method('DELETE')
+                                      <button type="submit" class="btn btn-link p-0 border-0">
                                         <i class="bx bx-trash-alt text-danger"></i>
-                                    </a>
+                                      </button>
+                                    </form>
                                 </div>
                             </div>
                             @if($note->description)
@@ -55,6 +59,7 @@
         </div>
     @endforeach
 </div>
+
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="update-status-url" content="{{ route('notes.update-status', ['note' => '__NOTE_ID__']) }}">
@@ -168,7 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
     card.addEventListener('dragend', dragEnd);
   });
 
-  document.querySelectorAll('.delete-note').forEach(btn => {
+  document.querySelectorAll('.delete-note').forEach(btn => 
+  {
     btn.addEventListener('click', function () {
       if (!confirm('Are you sure you want to delete this card?')) return;
       const noteId = this.dataset.id;
@@ -188,8 +194,77 @@ document.addEventListener('DOMContentLoaded', () => {
           alert(data.message || 'Delete failed.');
         }
       })
-      .catch(() => alert('Error deleting note.'));
     });
   });
 });
 </script>
+
+@foreach ($notes as $note)
+<div class="modal fade" id="edit_note_modal_{{ $note->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form class="modal-content form-submit-event" 
+              action="{{ route('notes.update', $note->id) }}" 
+              method="POST">
+            @csrf
+
+            <input type="hidden" name="id" value="{{ $note->id }}">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">
+                    {{ get_label('update_note', 'Update note') }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">
+                            {{ get_label('title', 'Title') }} <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="title"
+                               value="{{ $note->title }}" 
+                               placeholder="{{ get_label('please_enter_title', 'Please enter title') }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">
+                            {{ get_label('description', 'Description') }}
+                        </label>
+                        <textarea class="form-control description" 
+                                  name="description"
+                                  placeholder="{{ get_label('please_enter_description', 'Please enter description') }}">{{ $note->description }}</textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">
+                            {{ get_label('color', 'Color') }} <span class="asterisk">*</span>
+                        </label>
+                        <select class="form-select select-bg-label-success" name="color">
+                            @foreach(['success' => 'Green', 'warning' => 'Yellow', 'danger' => 'Red'] as $value => $label)
+                            <option class="badge bg-label-{{ $value }}" 
+                                    value="{{ $value }}"
+                                    {{ $note->color == $value ? 'selected' : '' }}>
+                                {{ get_label(strtolower($label), $label) }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    {{ get_label('close', 'Close') }}
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    {{ get_label('update', 'Update') }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach

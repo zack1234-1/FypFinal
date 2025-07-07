@@ -33,7 +33,6 @@ class NotesController extends Controller
         abort(403, 'No workspace selected');
     }
 
-
     $notes = Note::where('workspace_id', $workspaceId)  
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -59,14 +58,9 @@ class NotesController extends Controller
             $formFields['creator_id'] = isClient() ? 'c_' . $this->user->id : 'u_' . $this->user->id;
             
             
-            $note = Note::create($formFields);
-            
-            Session::flash('message', 'Note created successfully.');
-            return response()->json([
-                'error' => false, 
-                'id' => $note->id,
-                'message' => 'Note created successfully.'
-            ]);
+           $note = Note::create($formFields);
+           Session::flash('message', 'Card created successfully.');
+           return redirect()->back()->with('success', 'Card created successfully.');
             
         } catch (\Exception $e) {
             return response()->json([
@@ -86,9 +80,11 @@ class NotesController extends Controller
         ]);
         $note = Note::findOrFail($request->id);
 
-        if ($note->update($formFields)) {
-            Session::flash('message', 'Note updated successfully.');
-            return response()->json(['error' => false, 'id' => $note->id]);
+        if ($note->update($formFields))
+        {
+         Session::flash('message', 'Card updated successfully.');
+         return redirect()->back()->with('success', 'Card updated successfully.');
+
         } else {
             return response()->json(['error' => true, 'message' => 'Note couldn\'t updated.']);
         }
@@ -100,15 +96,13 @@ class NotesController extends Controller
         return response()->json(['note' => $note]);
     }
 
-
-
     public function destroy($id)
     {
         $response = DeletionService::delete(Note::class, $id, 'Note');
         Session::flash('message', 'Card deleted successfully.');
-        return  $response;
-        
+        return back();
     }
+
     public function destroy_multiple(Request $request)
     {
         // Validate the incoming request

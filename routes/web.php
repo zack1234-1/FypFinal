@@ -58,6 +58,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AIController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MeetingsController;
+use App\Http\Controllers\ZoomController;
 use Spatie\Permission\Middlewares\RoleMiddleware;
 use App\Http\Controllers\PaymentMethodsController;
 use App\Http\Controllers\SuperAdmin\PlanController;
@@ -309,6 +310,7 @@ Route::middleware(['CheckInstallation', 'checkRole',])->group(function ()
             Route::get('/meetings', [MeetingsController::class, 'index'])->name('meetings.index');
             Route::post('/meetings/{id}/save-recording', [MeetingsController::class, 'saveRecording'])->name('meetings.recording.save');
             Route::post('/meetings', [MeetingsController::class, 'store'])->name('meetings.store');
+            Route::get('/zoom/fetch-recordings', [ZoomController::class, 'fetchRecordings'])->name('zoom.fetch-recordings');
         });
         //Workspaces-------------------------------------------------------------
             Route::group(['middleware' => ['auth']], function () {
@@ -347,7 +349,8 @@ Route::middleware(['CheckInstallation', 'checkRole',])->group(function ()
             });
         Route::get('/workspaces/remove_participant', [WorkspacesController::class, 'remove_participant'])->middleware(['demo_restriction'])->name('workspaces.remove_participant');
         //Todo-------------------------------------------------------------
-        Route::middleware(['has_workspace'])->group(function () {
+        Route::middleware(['has_workspace'])->group(function () 
+        {
             Route::get('/todos', [TodosController::class, 'index'])->name('todos.index');
             Route::get('/todos/create', [TodosController::class, 'create'])->name('todos.create');
             Route::post('/todos/store', [TodosController::class, 'store'])->middleware(['log.activity'])->name('todos.store');

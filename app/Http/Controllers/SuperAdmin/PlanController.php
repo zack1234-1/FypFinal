@@ -193,11 +193,21 @@ class PlanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    
+    public function destroy($id)
     {
-        $response = DeletionService::delete(Plan::class, $id, 'Record');
-        return $response;
+        $plan = Plan::find($id);
+
+        if (!$plan) {
+            return back()->with('error', 'Plan not found.');
+        }
+
+        $plan->delete();
+
+        return back()->with('success', 'Plan deleted successfully.');
     }
+
+
     public function destroy_multiple(Request $request)
     {
         // Validate the incoming request

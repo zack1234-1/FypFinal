@@ -131,34 +131,6 @@
     </script>
 @endif
 <script src="{{ asset('assets/js/time-tracker.js') }}"></script>
-@if (getAuthenticatedUser() &&
-        !getAuthenticatedUser()->hasRole('superadmin') &&
-        !getAuthenticatedUser()->hasRole('manager'))
-    @if (Auth::guard('web')->check())
-        <div onclick="toggleChatIframe()">
-            <span>
-                <a href="javascript:void(0);">
-                    <img src="{{ asset('storage/chat-icon.png') }}" class="chat-img" alt="Chat">
-                </a>
-            </span>
-        </div>
-        <div id="chatIframeContainer" class="chat-iframe-container">
-            <iframe src="/{{ 'chat' }}" frameborder="0" class="chat-iframe"></iframe>
-        </div>
-    @endif
-@endif
-<!-- / Layout wrapper -->
-@if (getAuthenticatedUser() && getAuthenticatedUser()->can('create_timesheet'))
-    <!-- Timer image -->
-    <div onclick="open_timer_section()">
-        <span>
-            <a href="javascript:void(0);" title="<?= get_label('time_tracker', 'Time tracker') ?>">
-                <img src="{{ asset('storage/94150-clock.png') }}" class="timer-img" id="timer-image"
-                    alt="Timer" data-bs-toggle="modal" data-bs-target="#timerModal">
-            </a>
-        </span>
-    </div>
-@endif
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->
 <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>

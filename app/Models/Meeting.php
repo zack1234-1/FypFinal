@@ -9,7 +9,7 @@ class Meeting extends Model
 {
     use HasFactory;
 
-    protected $table = 'meeting'; 
+    protected $table = 'meeting';
 
     protected $fillable = [
         'topic',
@@ -19,15 +19,18 @@ class Meeting extends Model
         'zoom_start_url',
         'recording',
         'created_by',
+        'zoom_meeting_id'
     ];
 
-    protected $casts = [
+    protected $casts = 
+    [
         'start_time' => 'datetime',
+        'recording' => 'array', 
     ];
 
-    // Relationship: Meeting created by a user
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 }
+

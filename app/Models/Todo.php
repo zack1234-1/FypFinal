@@ -20,7 +20,8 @@ class Todo extends Model
         'admin_id',
         'start_date',
         'end_date',
-        'user_id'
+        'user_id',
+        'status'
     ];
 
     protected $casts = [

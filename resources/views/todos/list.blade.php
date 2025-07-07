@@ -237,7 +237,6 @@
                   </div>
                 @endif
               </div>
-              
               <div class="card-footer bg-transparent border-0 pt-0">
                 <div class="d-flex gap-2">
                   <button class="btn btn-outline-warning btn-sm flex-fill" data-bs-toggle="modal" data-bs-target="#editTodoModal_{{ $todo->id }}">
@@ -396,10 +395,14 @@
 
             <div class="col-md-6">
               <label class="form-label fw-semibold">Status</label>
-              <div class="form-control form-control-lg d-flex align-items-center bg-light">
-                <i class="bi bi-clock text-warning me-2"></i>
-                <span>Pending</span>
-              </div>
+              <select name="status" class="form-select form-select-lg bg-light" required>
+                <option value="pending" {{ $todo->status === 'pending' ? 'selected' : '' }}>
+                  <i class="bi bi-clock text-warning"></i> Pending
+                </option>
+                <option value="done" {{ $todo->status === 'done' ? 'selected' : '' }}>
+                  <i class="bi bi-check-circle-fill text-success"></i> Done
+                </option>
+              </select>
             </div>
 
             <div class="col-md-6">
@@ -501,7 +504,6 @@
       });
     });
 
-    // Auto-update end date when start date changes
     const startDateInputs = document.querySelectorAll('input[name="start_date"]');
     const endDateInputs = document.querySelectorAll('input[name="end_date"]');
     

@@ -46,7 +46,7 @@
                                     <div class="col">
                                         <h2 class="text-warning mb-1 fw-bold display-6">{{ $thisMonthCustomerCount }}</h2>
                                         <div class="text-muted small mb-2">
-                                            {!! get_label('monthly_customer', 'Total Customers <span class="d-block d-sm-inline fw-medium">(Monthly)</span>') !!}
+                                            {!! get_label('monthly_admin', 'Total Admins <span class="d-block d-sm-inline fw-medium">(Monthly)</span>') !!}
                                         </div>
                                         <div class="d-flex align-items-center">
                                             <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25">
@@ -112,7 +112,7 @@
                                     <div class="col">
                                         <h2 class="text-primary mb-1 fw-bold display-6">{{ $customerCounts }}</h2>
                                         <div class="text-muted small mb-2">
-                                            Total Customers
+                                            Total Admins
                                         </div>
                                         <div class="d-flex align-items-center">
                                             <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25">
@@ -142,10 +142,10 @@
                                             <i class="bx bx-bar-chart text-primary"></i>
                                         </span>
                                     </div>
-                                    <h4 class="mb-0 fw-bold text-dark">{{ get_label('total_customers', 'Total Customers') }}</h4>
+                                    <h4 class="mb-0 fw-bold text-dark">{{ get_label('total_admins', 'Total Admins') }}</h4>
                                 </div>
                                 <p class="text-muted mb-3 small">
-                                    {{ get_label('total_count_of_customers', 'Total Count of Customers') }}
+                                    {{ get_label('total_count_of_admins', 'Total Count of Admins') }}
                                 </p>
                                 <div class="d-flex align-items-center flex-wrap">
                                     <h1 class="text-primary mb-0 fw-bold me-3">{{ $customerCounts }}</h1>

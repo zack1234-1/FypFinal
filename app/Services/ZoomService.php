@@ -28,7 +28,6 @@ class ZoomService
         });
     }
 
-
     public function createMeeting($topic, $start_time, $duration = 30)
     {
         $accessToken = $this->getAccessToken();

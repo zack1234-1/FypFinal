@@ -47,8 +47,8 @@
                     <p class="text-muted mb-3 small text-uppercase fw-medium">Total Todos</p>
                     
                     @php
-                        $doneCount = $todos->where('completed', true)->count();
-                        $pendingCount = $todos->where('completed', false)->count();
+                        $doneCount = $todos->where('status', 'done')->count();
+                        $pendingCount = $todos->where('status', 'pending')->count();
                     @endphp
                     
                     <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">

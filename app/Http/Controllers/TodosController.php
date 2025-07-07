@@ -61,23 +61,21 @@ class TodosController extends Controller
             abort(403, 'No workspace selected');
         }
 
-        $currentUserId = auth()->id(); // Always use auth()->id() for simplicity
+        $currentUserId = auth()->id();
         $adminId = getAdminIdByUserRole();
 
-        // Get todos for the current user in the selected workspace
+
         $todos = Todo::where('workspace_id', $workspaceId)
                     ->whereJsonContains('user_id', (string) $currentUserId)
                     ->orderBy('created_at', 'desc')
                     ->get();
 
-        // Collect all user IDs assigned to todos
         $allUserIds = collect($todos)
                     ->pluck('user_id')
                     ->flatten(1)
                     ->unique()
                     ->values();
 
-        // Get user objects indexed by their ID
         $usersById = User::whereIn('id', $allUserIds)->get()
                         ->keyBy('id');
 
@@ -95,7 +93,6 @@ class TodosController extends Controller
         return view('todos.list', compact('todos', 'usersById', 'users'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -112,6 +109,7 @@ class TodosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
         $adminId = getAdminIdByUserRole();
@@ -127,16 +125,16 @@ class TodosController extends Controller
 
         $formFields['workspace_id'] = $this->workspace->id;
         $formFields['admin_id'] = $adminId;
+        $formFields['status'] = 'pending'; 
 
         $todo = new Todo($formFields);
-     
         $todo->creator()->associate(auth()->user()); 
-        
         $todo->save();
 
         Session::flash('message', 'Todo created successfully.');
         return redirect()->route('todos.index')->with('message', 'Todo created successfully.');
     }
+
     /**
      * Display the specified resource.
      *
@@ -170,21 +168,22 @@ class TodosController extends Controller
      */
     public function update(Request $request)
     {
-        
-        $formFields = $request->validate
-        ([
+        $formFields = $request->validate([
             'id' => ['required'],
             'title' => ['required'],
             'priority' => ['required'],
             'description' => ['nullable'],
             'start_date' => ['required', 'before_or_equal:end_date'],
             'end_date' => ['required'],
-            'user_id' => ['required', 'array'], 
+            'user_id' => ['required', 'array'],
+            'status' => ['required', 'in:pending,done'],
         ]);
 
+
         $todo = Todo::findOrFail($request->id);
-        // $this->authorize('update', [$this->user, $todo]);
-        if ($todo->update($formFields)) {
+
+        if ($todo->update($formFields)) 
+        {
             Session::flash('message', 'Todo updated successfully.');
             return redirect()->route('todos.index')->with('message', 'Todo updated successfully.');
         } else {
@@ -205,8 +204,6 @@ class TodosController extends Controller
         $response = DeletionService::delete(Todo::class, $id, 'Todo');
         return redirect()->route('todos.index')->with('message', 'Todo deleted successfully.');
     }
-
-
 
     public function update_status(Request $request)
     {

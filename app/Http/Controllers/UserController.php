@@ -336,14 +336,8 @@ class UserController extends Controller
         ]);
 
         $request->session()->regenerate();
-        Session::flash('message', 'Logged in successfully.');
 
-        return response()->json([
-            'error' => false,
-            'message' => 'Logged in successfully',
-            'redirect_url' => $request->redirect_url,
-            'account_type' => $account_type
-        ]);
+       return redirect()->intended(route('home.index'));
     }
 
 
