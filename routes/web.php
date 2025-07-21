@@ -106,6 +106,8 @@ Route::post('/chat/group/store', [ChatController::class, 'storeGroup'])->name('c
 Route::post('/chat/forward', [ChatController::class, 'forward'])->name('chat.forward');
 Route::get('/chat/reply-attachment/{id}', [ChatController::class, 'showReplyAttachment'])->name('chat.reply.attachment');
 Route::get('/chat/reply-attachment/{message}', [ChatController::class, 'downloadReplyAttachment'])->name('chat.download.attachment');
+Route::put('/groups/{group}', [ChatController::class, 'updateGroup'])->name('groups.update');  
+Route::delete('/groups/{group}', [ChatController::class, 'destroyGroup'])->name('groups.destroy');
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');

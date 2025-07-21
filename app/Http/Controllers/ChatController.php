@@ -355,4 +355,25 @@ class ChatController extends Controller
             'redirect' => route('chat.index', $params),
         ]);
     }
+
+    public function updateGroup(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $group = ChatGroup::findOrFail($id);
+        $group->name = $request->name;
+        $group->save();
+
+        return redirect()->back()->with('success', 'Group updated successfully.');
+    }
+
+    public function destroyGroup($id)
+    {
+        $group = ChatGroup::findOrFail($id);
+        $group->delete();
+
+        return redirect()->back()->with('success', 'Group deleted successfully.');
+    }
 }

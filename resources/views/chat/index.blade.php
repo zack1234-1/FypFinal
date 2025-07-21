@@ -180,27 +180,51 @@
             @if ($toId)
                 <div class="p-3 border-bottom d-flex align-items-center bg-light">
                     @if(isset($groupId))
-                        <div class="avatar me-3 bg-info rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                            <i class="fas fa-users text-white"></i>
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="d-flex align-items-center">
+                    <div class="avatar me-3 bg-info rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="fas fa-users text-white"></i>
+                    </div>
+
+                    @php
+                        $activeGroup = $groups->firstWhere('id', $groupId);
+                    @endphp
+
+                    @if ($activeGroup)
+                        <div>
+                            <h5 class="mb-0">{{ $activeGroup->name }}</h5>
                         </div>
+                    @endif
+                </div>
 
-                        @php
-                            $activeGroup = $groups->firstWhere('id', $groupId);
-                        @endphp
-
-                        @if ($activeGroup)
-                            <div>
-                                <h5 class="mb-0">{{ $activeGroup->name }}</h5>
-                            </div>
-                        @endif
-
+                <!-- Right: Dropdown Menu -->
+                <div class="dropdown">
+                    <button class="btn btn-link text-dark p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editGroupModal{{ $group->id }}">
+                                <i class="fas fa-edit me-2 text-primary"></i> Edit
+                            </a>
+                        </li>
+                        <li>
+                            <form method="POST" action="{{ route('groups.destroy', $group->id) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="fas fa-trash me-2"></i> Delete
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
                     @else
+
                         @php $currentUser = $users->firstWhere('id', $toId); @endphp
-                        <div class="avatar me-3 bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                            <span class="text-white">
-                              {{ auth()->user()?->first_name ? substr(auth()->user()->first_name, 0, 1) : '' }}
-                              {{ auth()->user()?->last_name ? substr(auth()->user()->last_name, 0, 1) : '' }}
-                            </span>
+                         <div class="avatar me-3 bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <span class="text-white">{{ substr($user->first_name, 0, 1) }}{{ substr($user->last_name, 0, 1) }}</span>
                         </div>
                         <div>
                             <h5 class="mb-0">{{ $currentUser->first_name }} {{ $currentUser->last_name }}</h5>
@@ -656,9 +680,7 @@
             <select class="form-select" name="to_id" id="forward_to_id">
             <option value="">-- Select User --</option>
               @foreach ($users as $user)
-                @if($user->id != auth()->id())
                   <option value="{{ $user->id }}">{{ $user->first_name }}</option>
-                @endif
               @endforeach
             </select>
           </div>
@@ -699,6 +721,35 @@
   </div>
 </div>
 
+<!-- Edit Group Modal -->
+@foreach ($groups as $group)
+<div class="modal fade" id="editGroupModal{{ $group->id }}" tabindex="-1" aria-labelledby="editGroupModalLabel{{ $group->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('groups.update', $group->id) }}">
+            @csrf
+            @method('PUT')
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editGroupModalLabel{{ $group->id }}">Edit Group</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="groupName{{ $group->id }}" class="form-label">Group Name</label>
+                        <input type="text" name="name" id="groupName{{ $group->id }}" class="form-control" value="{{ $group->name }}" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Group</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
