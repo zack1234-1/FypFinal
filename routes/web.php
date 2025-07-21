@@ -22,8 +22,8 @@ Route::get('/', function () {
     return view('login');
 });
 
+Route::post('/users/authenticate', [UserController::class, 'authenticate'])->name('users.authenticate');
 Route::middleware(['web'])->group(function () {
-    Route::post('/users/authenticate', [UserController::class, 'authenticate'])->name('users.authenticate');
     Route::get('/home', [DashboardController::class, 'index'])->name('home.index');
 });
 
