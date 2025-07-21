@@ -426,7 +426,7 @@
                 </div>
 
                 <!-- Message Input -->
-                <div class="position-fixed bottom-0 " style="left: 680px; width: 54%; z-index: 100;">
+                <div class="position-fixed bottom-0 " style="left: 580px; width: 54%; z-index: 100;">
                     <form id="sendForm" onsubmit="sendMessage(event)" enctype="multipart/form-data">
                         <div class="input-group mb-2">
                             <button class="btn btn-outline-secondary" type="button" id="emojiToggle">
