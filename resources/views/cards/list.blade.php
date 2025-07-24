@@ -176,12 +176,6 @@
                                 </option>
                             @endforeach
                         </select>
-
-                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#create_status_modal" data-bs-toggle="tooltip" data-bs-placement="right"
-                            data-bs-original-title="<?= get_label('create_status', 'Create status') ?>">
-                            <i class="bx bx-plus"></i>
-                        </button>
                     </div>
 
                     @error('status_id')
@@ -201,44 +195,6 @@
     </div>
 </div>
 
-<!-- Create Status Modal -->
-<div class="modal fade" id="create_status_modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form class="modal-content form-submit-event" action="{{ route('status.store') }}" method="POST">
-            <input type="hidden" name="dnr">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel1">
-                    <?= get_label('create_status', 'Create status') ?>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            @csrf
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col mb-3">
-                        <label for="nameBasic" class="form-label">
-                            <?= get_label('title', 'Title') ?> <span class="asterisk">*</span>
-                        </label>
-                        <input type="text" id="nameBasic" class="form-control" name="title"
-                            placeholder="<?= get_label('please_enter_title', 'Please enter title') ?>" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="mb-3">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <?= get_label('close', 'Close') ?>
-                </button>
-                <button type="submit" class="btn btn-primary" id="submit_btn">
-                    <?= get_label('create', 'Create') ?>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
 
 <!-- Edit Note Modals -->
 @foreach ($notes as $note)
