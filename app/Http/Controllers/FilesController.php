@@ -15,68 +15,12 @@ class FilesController extends Controller
         return view('files.index');
     }
 
-    // public function upload(Request $request)
-    // {
-    //     $request->validate([
-    //         'files.*' => 'required|file|max:2048',
-    //         'folderName' => 'nullable|string|max:255',
-    //     ]);
-
-
-    //     if (!$request->hasFile('files')) {
-    //         return back()->with('error', 'No files were uploaded.');
-    //     }
-
-    //     $folderName = $request->input('folderName');
-    //     $uploadedFiles = [];
-    //     $failedFiles = [];
-
-    //     if ($folderName) 
-    //     {
-    //         $folder = Folder::firstOrCreate(['name' => $folderName]);
-    //         $folderId = $folder->id;
-    //     } else {
-    //         $folderId = null;
-    //     }
-
-    //     foreach ($request->file('files') as $file) {
-    //         try {
-    //             $content = file_get_contents($file->getRealPath());
-    //             if ($content === false) {
-    //                 throw new \Exception("Could not read file contents");
-    //             }
-
-    //             File::create([
-    //                 'filename' => $file->getClientOriginalName(),
-    //                 'mime_type' => $file->getMimeType(),
-    //                 'content' => $content,
-    //                 'folder_id' => $folderId ?: null,
-    //             ]);
-    //             $uploadedFiles[] = $file->getClientOriginalName();
-
-    //         } catch (\Exception $e) {
-    //             $failedFiles[] = $file->getClientOriginalName();
-    //             \Log::error("File upload failed: " . $e->getMessage());
-    //         }
-    //     }
-
-    //     $message = '';
-    //     if (!empty($uploadedFiles)) {
-    //         $message = 'Successfully uploaded: ' . implode(', ', $uploadedFiles) . '. ';
-    //     }
-    //     if (!empty($failedFiles)) {
-    //         $message .= 'Failed to upload: ' . implode(', ', $failedFiles);
-    //     }
-
-    //     return back()->with(empty($uploadedFiles) ? 'error' : 'success', $message);
-    // }
-
     public function upload(Request $request)
     {
         $workspaceId = session()->get('workspace_id');
 
         $request->validate([
-            'files.*' => 'required|file|max:2048',
+            'files.*' => 'required|file|max:512000', 
             'folderName' => 'nullable|string|max:255',
         ]);
 

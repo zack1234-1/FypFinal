@@ -21,17 +21,6 @@
                 </ol>
             </nav>
         </div>
-
-        <div class="col-12 col-lg-4">
-            <div class="d-flex justify-content-lg-end">
-                <a href="{{ route('recordings.index') }}" 
-                id="viewRecordingsBtn"
-                class="btn btn-outline-secondary d-flex align-items-center">
-                    <i class='bx bx-video-recording me-2'></i>
-                    <span>View Recordings</span>
-                </a>
-            </div>
-        </div>
     </div>
 
     <!-- Main Content -->
@@ -83,9 +72,6 @@
                         <div class="d-flex justify-content-center gap-2">
                             <a href="{{ route('home.index') }}" class="btn btn-outline-primary">
                                 <i class='bx bx-home me-2'></i>Back to Home
-                            </a>
-                            <a href="{{ route('recordings.index') }}" class="btn btn-outline-secondary">
-                                <i class='bx bx-video-recording me-2'></i>View Recordings
                             </a>
                         </div>
                     @endif

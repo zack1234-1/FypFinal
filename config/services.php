@@ -14,6 +14,13 @@ return [
     |
     */
 
+    'daily' => 
+    [
+        'api_key' => env('DAILY_API_KEY'),
+        'base_url' => 'https://api.daily.co/v1/',
+        'subdomain' => env('DAILY_SUBDOMAIN'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

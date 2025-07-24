@@ -58,7 +58,8 @@ Route::get('/meetings', [MeetingsController::class, 'index'])->name('meetings.in
 Route::post('/meetings/{id}/save-recording', [MeetingsController::class, 'saveRecording'])->name('meetings.recording.save');
 Route::post('/meetings', [MeetingsController::class, 'store'])->name('meetings.store');
 Route::get('/recording', [MeetingsController::class, 'recordingIndex'])->name('recordings.index');
-Route::get('/recording/store-blob', [MeetingsController::class, 'moveAndStoreZoomRecordings'])->name('recordings.storeBlob');
+Route::post('/save-recording', [MeetingController::class, 'saveRecording'])->name('recording.save');
+Route::get('/recordings/fetch', [MeetingsController::class, 'fetchFromDaily'])->name('recordings.storeBlob');
 Route::get('/recording/{id}/stream', [MeetingsController::class, 'stream'])->name('recordings.stream');
 Route::get('/recording/{id}/download', [MeetingsController::class, 'download'])->name('recordings.download');
 
@@ -79,6 +80,8 @@ Route::get('/admins', [AdminController::class,'index'])->name('admins.index');
 Route::post('/admins/store', [AdminController::class, 'store'])->name('admins.store');
 Route::post('/admins/update/{id}', [AdminController::class, 'update'])->name('admins.update');
 Route::delete('/admins/destroy/{id}', [AdminController::class,'destroy'])->name('admins.destroy');
+
+
 Route::get('/plans', [PlanController::class,'index'])->name('plans.index');
 Route::post('/plans/store', [PlanController::class, 'store'])->name('plans.store');
 Route::put('/plans/update/{id}', [PlanController::class, 'update'])->name('plans.update');

@@ -200,6 +200,6 @@
             new bootstrap.Toast(toastEl, { delay: 4000 }).show();
         });
     });
-    
+
 </script>
 @endsection

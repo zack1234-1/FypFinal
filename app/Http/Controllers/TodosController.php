@@ -17,32 +17,7 @@ class TodosController extends Controller
 {
     protected $workspace;
     protected $user;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    // public function index()
-    // {
-    //     $workspaceId = session()->get('workspace_id');
-        
-    //     if (!$workspaceId) {
-    //         abort(403, 'No workspace selected');
-    //     }
 
-    //     $currentUserId = $this->user->id;
-
-
-    //     $todos = Todo::where('workspace_id', $workspaceId)  
-    //                 ->whereJsonContains('user_id', (string) $currentUserId)
-    //                 ->orderBy('is_completed', 'asc')   
-    //                 ->orderBy('created_at', 'desc')
-    //                 ->get();
-
-    //     return view('todos.list', ['todos' => $todos]);
-    // }
-
-    // app/Http/Controllers/TodoController.php
     public function index()
     {
         $projectId = session('workspace_id');
@@ -76,22 +51,10 @@ class TodosController extends Controller
         return view('todos.list', compact('todos', 'usersById', 'users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('todos.create_todo');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
 
     public function store(Request $request)
     {
@@ -118,23 +81,6 @@ class TodosController extends Controller
         return redirect()->route('todos.index')->with('success', 'Todo created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
 
@@ -240,30 +186,4 @@ class TodosController extends Controller
         return response()->json(['todo' => $todo]);
     }
 
-    public function destroy_multiple(Request $request)
-    {
-        $validatedData = $request->validate([
-            'ids' => 'required|array', // Ensure 'ids' is present and an array
-            'ids.*' => 'integer|exists:todos,id' // Ensure each ID in 'ids' is an integer and exists in the table
-        ]);
-
-        $ids = $validatedData['ids'];
-        $deletedIds = [];
-        $deletedTitles = [];
-
-        // Perform deletion using validated IDs
-        foreach ($ids as $id) {
-            $todo = Todo::findOrFail($id);
-            $deletedIds[] = $id;
-            $deletedTitles[] = $todo->title;
-            DeletionService::delete(Todo::class, $id, 'Todo');
-        }
-        Session::flash('message', 'Todo(s) deleted successfully.');
-        return response()->json([
-            'error' => false,
-            'message' => 'Todo(s) deleted successfully.',
-            'id' => $deletedIds,
-            'titles' => $deletedTitles
-        ]);
-    }
 }
