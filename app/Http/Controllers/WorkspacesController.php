@@ -92,8 +92,11 @@ class WorkspacesController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'user_ids' => 'required|array',
+            'user_ids' => 'required|array|min:1',
             'user_ids.*' => 'exists:users,id',
+        ], [
+            'user_ids.required' => 'You must assign the project to at least one user.',
+            'user_ids.min' => 'You must assign the project to at least one user.',
         ]);
 
         if (!in_array(auth()->id(), $request->user_ids)) {
@@ -108,7 +111,6 @@ class WorkspacesController extends Controller
 
         return redirect()->back()->with('success', 'Project updated successfully.');
     }
-
 
     public function destroy($id)
     {
