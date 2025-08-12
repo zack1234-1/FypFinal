@@ -38,7 +38,7 @@ class AdminController extends Controller
             'last_name' => 'required|string|regex:/^[^\d]+$/',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|string|regex:/^\d+$/|unique:users,phone',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:1|confirmed',
             'password_confirmation' => 'required',
         ], [
             'first_name.required' => 'First name is required.',
@@ -56,7 +56,7 @@ class AdminController extends Controller
             'phone.regex' => 'Phone number can only contain digits.',
             'password.required' => 'Password is required.',
             'password.string' => 'Password must be a string.',
-            'password.min' => 'Password must be at least 6 characters long.',
+            'password.min' => 'Password must be at least 1 characters long.',
             'password.confirmed' => 'Password confirmation does not match.',
         ]);
 
@@ -98,7 +98,7 @@ class AdminController extends Controller
         ];
 
         if ($request->filled('password')) {
-            $rules['password'] = 'required|string|min:6|confirmed';
+            $rules['password'] = 'required|string|min:1|confirmed';
             $rules['password_confirmation'] = 'required';
         }
 
@@ -121,7 +121,7 @@ class AdminController extends Controller
             'email.unique'        => 'Email already exists.',
             'password.required'   => 'Password is required when updating.',
             'password.string'     => 'Password must be a string.',
-            'password.min'        => 'Password must be at least 6 characters.',
+            'password.min'        => 'Password must be at least 1 characters.',
             'password.confirmed'  => 'Password confirmation does not match.',
             'password_confirmation.required' => 'Please confirm the new password.',
         ];

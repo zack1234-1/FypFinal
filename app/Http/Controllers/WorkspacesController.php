@@ -39,8 +39,15 @@ class WorkspacesController extends Controller
             $memberIds[] = $currentUserId;
         }
 
-        $users = User::whereIn('id', $memberIds)->get();
+        $adminUserId =Admin::where('id', $adminId)->value('user_id');
 
+        if (!in_array($adminUserId, $memberIds)) {
+            $memberIds[] = $adminUserId;
+        }
+        
+        $memberIds = array_unique($memberIds);
+
+        $users = User::whereIn('id', $memberIds)->get();
         $workspaces = Workspace::where('admin_id', $adminId)->get();
 
         return view('workspaces.workspaces', compact('workspaces', 'users'));
