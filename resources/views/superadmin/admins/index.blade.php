@@ -106,10 +106,7 @@
             </div>
     @endif
 </div>
-@endsection
 
-
-<!-- Modal -->
 <div class="modal fade" id="createCustomerModal" tabindex="-1" aria-labelledby="createCustomerModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form action="{{ route('admins.store') }}" method="POST">
@@ -212,3 +209,5 @@
     </div>
 </div>
 @endforeach
+
+@endsection

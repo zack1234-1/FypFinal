@@ -174,41 +174,4 @@ function downloadStoredFile(filename)
 </script>
 @endsection
 
-<!-- Edit File Modal -->
-<div class="modal fade" id="editFileModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="editFileForm" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit File</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Folder</label>
-                        <input type="text" name="folder" id="editFileFolder" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="newFile" class="form-label">Replace File (optional)</label>
-                        <input type="file" name="file" id="newFile" class="form-control" accept="*/*">
-                        <small class="text-muted">Leave empty to keep current file</small>
-                    </div>
-                    <div class="card mb-3" id="currentFileCard">
-                        <div class="card-body">
-                            <h6>Current File:</h6>
-                            <div id="currentFileInfo"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 
